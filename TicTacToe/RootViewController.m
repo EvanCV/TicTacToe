@@ -8,6 +8,8 @@
 
 #import "RootViewController.h"
 
+//------------------------------------- Setting Properties -----------------------------------
+
 @interface RootViewController ()
 
 //Mutable arrays which will be filled with the users actions
@@ -48,27 +50,22 @@
 //Boolean to determine which players turn it is
 @property BOOL currentPlayer;
 
+@property UIGestureRecognizer *gestureRecognizer;
 
+@property (weak, nonatomic) IBOutlet UIButton *resetButton;
 
 @end
 
 @implementation RootViewController
+
+//-----------------------------------setting all of the necessary data-------------------------
 
 - (void)viewDidLoad {
 
     [super viewDidLoad];
 
     //Setting current player and corresponding title text
-    self.currentPlayer = [self getRandomYesOrNo];
-
-    if (self.currentPlayer == YES)
-    {
-        self.whichPlayerLabel.text = @"PLayer X you're up!";
-    }
-    else if (self.currentPlayer == NO)
-    {
-        self.whichPlayerLabel.text = @"Player O you're up!";
-    }
+    [self setRandomFirstPLayer];
 
     //Initialize an array with all of the UIImageViews
     self.baseImageViewArray = [[NSMutableArray alloc]initWithObjects:self.A1, self.A2, self.A3, self.B1, self.B2, self.B3,self.C1, self.C2, self.C3, nil];
@@ -96,7 +93,10 @@
     self.setWithUserOInputs = [NSMutableSet new];
 }
 
-//Creates random BOOL to set which player starts first
+//---------------------------------------------Helper Methods-----------------------------
+
+
+//Creates random BOOL
 -(BOOL) getRandomYesOrNo
 {
     int random = (arc4random()%100)+1;
@@ -108,65 +108,132 @@
         return NO;
 }
 
-//comparing two sets to see if players moves = win
-- (BOOL) checkIfPlayerDidWin
+
+//set first player based on input getRandomYesOrNo
+-(void) setRandomFirstPLayer
 {
-    if ([self.setWithUserOInputs intersectsSet:self.allAnswerPossibilitiesSet] || [self.setWithUserXInputs intersectsSet:self.allAnswerPossibilitiesSet])
+    self.currentPlayer = [self getRandomYesOrNo];
+
+    if (self.currentPlayer == YES)
     {
-        return YES;
+        self.whichPlayerLabel.text = @"PLayer X you're up!";
     }
-        return NO;
+    else if (self.currentPlayer == NO)
+    {
+        self.whichPlayerLabel.text = @"Player O you're up!";
+    }
 }
 
 
+//comparing two sets to see if players moves = win
+- (BOOL) checkIfPlayerDidWin
+{
+    for (NSSet *set in self.allAnswerPossibilitiesSet)
+    {
+        if ([set isSubsetOfSet:self.setWithUserOInputs])
+        {
+            
+            self.whichPlayerLabel.text = @"Player O whooped yo ass!";
+            [self.setWithUserXInputs removeAllObjects];
+            [self.setWithUserOInputs removeAllObjects];
+            return YES;
+        }
+        if ([set isSubsetOfSet:self.setWithUserXInputs])
+        {
+            self.whichPlayerLabel.text = @"Player X whooped yo ass!";
+            [self.setWithUserXInputs removeAllObjects];
+            [self.setWithUserOInputs removeAllObjects];
+            return YES;
+        }
+        if ((self.setWithUserXInputs.allObjects.count + self.setWithUserOInputs.allObjects.count) >= 9 && (![set isSubsetOfSet:self.setWithUserOInputs]) && ![set isSubsetOfSet:self.setWithUserXInputs])
+        {
+            self.whichPlayerLabel.text = @"Cats Game...MEOW!";
+            [self.setWithUserXInputs removeAllObjects];
+            [self.setWithUserOInputs removeAllObjects];
+            return YES;
+        }
+
+    }
+    return NO;
+}
+
+
+//Method to end game and disallow further play
+- (void) restartGame
+{
+    //erase all images in UIImageViews
+    for (UIImageView *baseViews in self.baseImageViewArray)
+    {
+        baseViews.image = [[UIImage alloc]initWithCGImage:nil];
+    }
+
+    //Enable touch gesture on the playing board
+    self.gestureRecognizer.enabled = YES;
+
+    //reset new first player
+    [self setRandomFirstPLayer];
+}
+//--------------------------------------The Actions--------------------------------------------
+
+//Reset button clears frames and starts new game
+- (IBAction)onResetButtonPressed:(id)sender
+{
+    [self restartGame];
+}
+
+
+//The meat of the functions
 - (IBAction)onScreenTapped:(UIGestureRecognizer *)gesture
 {
+    //
+    self.gestureRecognizer = gesture;
 
     //CGPoint coordinates when screen is touched
     CGPoint touchPoint  = [gesture locationInView:self.view];
 
-    //For loop gets the frame property from all ImageViews then determines whether the CGPoint iis in any UIView frames. If the the CGPoint is in a frame it will place either an X or O image in the UIView depending on which user's turn it is.
-    for (UIImageView *myImageView in self.baseImageViewArray)
+    if (![self checkIfPlayerDidWin])
     {
-        //Check to see if touch was in a frame and whether or not that frame is empty
-        if (CGRectContainsPoint(myImageView.frame, touchPoint) && myImageView.image == nil)
+        //For loop gets the frame property from all ImageViews then determines whether the CGPoint iis in any UIView frames. If the the CGPoint is in a frame it will place either an X or O image in the UIView depending on which user's turn it is.
+        for (UIImageView *myImageView in self.baseImageViewArray)
         {
-            if (self.currentPlayer == YES)
+            //Check to see if touch was in a frame and whether or not that frame is empty
+            if (CGRectContainsPoint(myImageView.frame, touchPoint) && myImageView.image == nil)
             {
-                myImageView.image = [UIImage imageNamed:@"Xpicture"];
-                [self.setWithUserXInputs addObject:[NSString stringWithFormat:@"%li", (long)myImageView.tag]];
-                NSLog(@"%@",self.setWithUserXInputs.description);
-            }
-            if (self.currentPlayer == NO)
-            {
-                myImageView.image = [UIImage imageNamed:@"Opicture"];
-                [self.setWithUserOInputs addObject:[NSString stringWithFormat:@"%li", (long)myImageView.tag]];
-                NSLog(@"%@",self.setWithUserOInputs.description);
-            }
-            if (gesture.state == UIGestureRecognizerStateEnded)
-            {
+                if (self.currentPlayer == YES)
+                {
+                    myImageView.image = [UIImage imageNamed:@"Xpicture"];
+                    [self.setWithUserXInputs addObject:[NSString stringWithFormat:@"%li", (long)myImageView.tag]];
+                    NSLog(@"%@",self.setWithUserXInputs.description);
+                }
                 if (self.currentPlayer == NO)
                 {
-                    self.currentPlayer = YES;
-                    self.whichPlayerLabel.text = @"PLayer X you're up!";
+                    myImageView.image = [UIImage imageNamed:@"Opicture"];
+                    [self.setWithUserOInputs addObject:[NSString stringWithFormat:@"%li", (long)myImageView.tag]];
+                    NSLog(@"%@",self.setWithUserOInputs.description);
                 }
-                else
+                if (gesture.state == UIGestureRecognizerStateEnded)
                 {
-                    self.currentPlayer = NO;
-                    self.whichPlayerLabel.text = @"Player O you're up!";
+                    if ([self checkIfPlayerDidWin])
+                    {
+                        [self checkIfPlayerDidWin];
+                        gesture.enabled = NO;
+                    }
+                    else
+                        if (self.currentPlayer == NO)
+                        {
+                            self.currentPlayer = YES;
+                            self.whichPlayerLabel.text = @"PLayer X you're up!";
+                        }
+                        else
+                        {
+                            self.currentPlayer = NO;
+                            self.whichPlayerLabel.text = @"Player O you're up!";
+                        }
                 }
-            }
-            if ([self checkIfPlayerDidWin])
-            {
-                [self.setWithUserXInputs removeAllObjects];
-                [self.setWithUserOInputs removeAllObjects];
-                self.whichPlayerLabel.text = @"game over";
+                
             }
         }
     }
-
-
 }
-
 
 @end
