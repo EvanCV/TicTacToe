@@ -1,20 +1,38 @@
 //
-//  ViewController.m
+//  AgainstCPUViewController.m
 //  TicTacToe
 //
-//  Created by Evan Vandenberg on 1/8/15.
+//  Created by Evan Vandenberg on 1/10/15.
 //  Copyright (c) 2015 Evan Vandenberg. All rights reserved.
 //
 
-#import "RootViewController.h"
+#import "AgainstCPUViewController.h"
 
-//------------------------------------- Setting Properties -----------------------------------
+@interface AgainstCPUViewController ()
 
-@interface RootViewController ()
+//Adding all necessary UI elements
+@property (weak, nonatomic) IBOutlet UILabel *whichPlayerLabel;
 
-//Mutable arrays which will be filled with the users actions
-@property NSMutableSet *setWithUserXInputs;
-@property NSMutableSet *setWithUserOInputs;
+@property (weak, nonatomic) IBOutlet UIImageView *a1;
+@property (weak, nonatomic) IBOutlet UIImageView *a2;
+@property (weak, nonatomic) IBOutlet UIImageView *a3;
+@property (weak, nonatomic) IBOutlet UIImageView *b1;
+@property (weak, nonatomic) IBOutlet UIImageView *b2;
+@property (weak, nonatomic) IBOutlet UIImageView *b3;
+@property (weak, nonatomic) IBOutlet UIImageView *c1;
+@property (weak, nonatomic) IBOutlet UIImageView *c2;
+@property (weak, nonatomic) IBOutlet UIImageView *c3;
+
+
+//Array of all of my image views
+@property NSMutableArray *baseImageViewArray;
+
+
+//Mutable arrays which will be filled with the user & computer actions
+@property NSMutableSet *humanInputs;
+@property NSMutableSet *computerInputs;
+@property NSMutableSet *currentStateOfBoard;
+
 
 //Winning condition sets.
 @property NSSet *allAnswerPossibilitiesSet;
@@ -27,48 +45,33 @@
 @property NSSet *winningCondition7;
 @property NSSet *winningCondition8;
 
-//Setting the property for each UIImageView in the tic tac toe
-//First row = A, Left most column = 1
-@property (weak, nonatomic) IBOutlet UIImageView *A1;
-@property (weak, nonatomic) IBOutlet UIImageView *A2;
-@property (weak, nonatomic) IBOutlet UIImageView *A3;
-//Second row = B, Left most column = 1
-@property (weak, nonatomic) IBOutlet UIImageView *B1;
-@property (weak, nonatomic) IBOutlet UIImageView *B2;
-@property (weak, nonatomic) IBOutlet UIImageView *B3;
-//Third row = B, Left most column = 1
-@property (weak, nonatomic) IBOutlet UIImageView *C1;
-@property (weak, nonatomic) IBOutlet UIImageView *C2;
-@property (weak, nonatomic) IBOutlet UIImageView *C3;
 
-//Array of all of my image views
-@property NSMutableArray *baseImageViewArray;
-
-//Top label
-@property (weak, nonatomic) IBOutlet UILabel *whichPlayerLabel;
-
-//Boolean to determine which players turn it is
-@property BOOL currentPlayer;
-
+//Recognize screen gestures
 @property UIGestureRecognizer *gestureRecognizer;
 
-@property (weak, nonatomic) IBOutlet UIButton *resetButton;
+
+//determine who's turn it is
+@property BOOL currentPlayer;
+
+@property UIImage *userIconType;
+@property UIImage *compIconType;
+
+
 
 @end
 
-@implementation RootViewController
 
-//-----------------------------------setting all of the necessary data-------------------------
+@implementation AgainstCPUViewController
 
 - (void)viewDidLoad {
-
     [super viewDidLoad];
+    // Do any additional setup after loading the view.
 
     //Setting current player and corresponding title text
     [self setRandomFirstPLayer];
 
     //Initialize an array with all of the UIImageViews
-    self.baseImageViewArray = [[NSMutableArray alloc]initWithObjects:self.A1, self.A2, self.A3, self.B1, self.B2, self.B3,self.C1, self.C2, self.C3, nil];
+    self.baseImageViewArray = [[NSMutableArray alloc]initWithObjects:self.a1, self.a2, self.a3, self.b1, self.b2, self.b3,self.c1, self.c2, self.c3, nil];
 
     //Setting the winning conditions
     //3 in a row vertically
@@ -88,10 +91,10 @@
     //All of the winning conditions set as object in a comprehensive set
     self.allAnswerPossibilitiesSet = [[NSSet alloc]initWithObjects:self.winningCondition1, self.winningCondition2, self.winningCondition3, self.winningCondition4, self.winningCondition5, self.winningCondition6, self.winningCondition7, self.winningCondition8, nil];
 
-    //Initialize user sets
-    self.setWithUserXInputs = [NSMutableSet new];
-    self.setWithUserOInputs = [NSMutableSet new];
+    self.humanInputs = [NSMutableSet new];
+    self.computerInputs = [NSMutableSet new];
 }
+
 
 //---------------------------------------------Helper Methods-----------------------------
 
@@ -109,18 +112,30 @@
 }
 
 
-//set first player based on input getRandomYesOrNo
+//set first player and icon type based arc4random
 -(void) setRandomFirstPLayer
 {
-    self.currentPlayer = [self getRandomYesOrNo];
+    //set random icon type (X or O)
+    int random1 = (arc4random()%200)+1;
+    if (random1 < 100)
+    {
+        self.userIconType = [UIImage imageNamed:@"Xpicture"];
+        self.compIconType = [UIImage imageNamed:@"Opicture"];
+    }
+    else
+        self.userIconType = [UIImage imageNamed:@"Opicture"];
+        self.compIconType = [UIImage imageNamed:@"Xpicture"];
 
+    //set random first player
+    self.currentPlayer = [self getRandomYesOrNo];
     if (self.currentPlayer == YES)
     {
-        self.whichPlayerLabel.text = @"PLayer X you're up!";
+        self.whichPlayerLabel.text = @"CPU Is Thinking..";
+
     }
     else if (self.currentPlayer == NO)
     {
-        self.whichPlayerLabel.text = @"Player O you're up!";
+        self.whichPlayerLabel.text = @"You're Up!";
     }
 }
 
@@ -130,26 +145,27 @@
 {
     for (NSSet *set in self.allAnswerPossibilitiesSet)
     {
-        if ([set isSubsetOfSet:self.setWithUserOInputs])
+        if ([set isSubsetOfSet:self.humanInputs])
         {
-            
-            self.whichPlayerLabel.text = @"Player O whooped yo ass!";
-            [self.setWithUserXInputs removeAllObjects];
-            [self.setWithUserOInputs removeAllObjects];
+
+            self.whichPlayerLabel.text = @"You have acheived the IMPOSSIBLE!";
+            [self.humanInputs removeAllObjects];
+            [self.computerInputs removeAllObjects];
             return YES;
         }
-        if ([set isSubsetOfSet:self.setWithUserXInputs])
+        if ([set isSubsetOfSet:self.computerInputs])
         {
-            self.whichPlayerLabel.text = @"Player X whooped yo ass!";
-            [self.setWithUserXInputs removeAllObjects];
-            [self.setWithUserOInputs removeAllObjects];
+            self.whichPlayerLabel.text = @"CPU WINS";
+            [self.humanInputs removeAllObjects];
+            [self.computerInputs removeAllObjects];
             return YES;
         }
-        if ((self.setWithUserXInputs.allObjects.count + self.setWithUserOInputs.allObjects.count) >= 9 && (![set isSubsetOfSet:self.setWithUserOInputs]) && ![set isSubsetOfSet:self.setWithUserXInputs])
+        if ((self.humanInputs.allObjects.count + self.computerInputs.allObjects.count) >= 9 && (![set isSubsetOfSet:self.humanInputs]) && ![set isSubsetOfSet:self.computerInputs])
         {
             self.whichPlayerLabel.text = @"Cats Game...MEOW!";
-            [self.setWithUserXInputs removeAllObjects];
-            [self.setWithUserOInputs removeAllObjects];
+            [self.humanInputs removeAllObjects];
+            [self.computerInputs removeAllObjects];
+
             return YES;
         }
     }
@@ -172,25 +188,30 @@
     //reset new first player
     [self setRandomFirstPLayer];
 }
-//--------------------------------------The Actions--------------------------------------------
 
-//Reset button clears frames and starts new game
+//----------------------------------------- The Actions ------------------------------------------
+
 - (IBAction)onResetButtonPressed:(id)sender
 {
     [self restartGame];
 }
 
+- (void)computerMoves
+{
+    if (self.currentPlayer == YES) {
 
-//The meat of the functions
+    }
+
+}
+
 - (IBAction)onScreenTapped:(UIGestureRecognizer *)gesture
 {
-    //
     self.gestureRecognizer = gesture;
 
     //CGPoint coordinates when screen is touched
     CGPoint touchPoint  = [gesture locationInView:self.view];
 
-    if (![self checkIfPlayerDidWin])
+    if (![self checkIfPlayerDidWin] && (self.currentPlayer == NO))
     {
         //For loop gets the frame property from all ImageViews then determines whether the CGPoint iis in any UIView frames. If the the CGPoint is in a frame it will place either an X or O image in the UIView depending on which user's turn it is.
         for (UIImageView *myImageView in self.baseImageViewArray)
@@ -198,17 +219,10 @@
             //Check to see if touch was in a frame and whether or not that frame is empty
             if (CGRectContainsPoint(myImageView.frame, touchPoint) && myImageView.image == nil)
             {
-                if (self.currentPlayer == YES)
                 {
-                    myImageView.image = [UIImage imageNamed:@"Xpicture"];
-                    [self.setWithUserXInputs addObject:[NSString stringWithFormat:@"%li", (long)myImageView.tag]];
-                    NSLog(@"%@",self.setWithUserXInputs.description);
-                }
-                if (self.currentPlayer == NO)
-                {
-                    myImageView.image = [UIImage imageNamed:@"Opicture"];
-                    [self.setWithUserOInputs addObject:[NSString stringWithFormat:@"%li", (long)myImageView.tag]];
-                    NSLog(@"%@",self.setWithUserOInputs.description);
+                    myImageView.image = self.userIconType;
+                    [self.humanInputs addObject:[NSString stringWithFormat:@"%li", (long)myImageView.tag]];
+                    NSLog(@"%@",self.humanInputs.description);
                 }
                 if (gesture.state == UIGestureRecognizerStateEnded)
                 {
@@ -218,21 +232,15 @@
                         gesture.enabled = NO;
                     }
                     else
-                        if (self.currentPlayer == NO)
-                        {
-                            self.currentPlayer = YES;
-                            self.whichPlayerLabel.text = @"PLayer X you're up!";
-                        }
-                        else
-                        {
-                            self.currentPlayer = NO;
-                            self.whichPlayerLabel.text = @"Player O you're up!";
-                        }
+                    {
+                        self.currentPlayer = YES;
+                        self.whichPlayerLabel.text = @"CPU is thinking...";
+                    }
                 }
-                
             }
         }
     }
 }
+
 
 @end
