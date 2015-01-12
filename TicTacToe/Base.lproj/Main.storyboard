@@ -206,6 +206,16 @@
                                     <action selector="onResetButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5Y4-LI-hoa"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timer" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XPt-0n-V6R">
+                                <rect key="frame" x="139" y="420" width="44" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="CkR-68-XRp"/>
+                                    <constraint firstAttribute="width" constant="44" id="X9X-MT-oA5"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.68627452850341797" green="0.9647059440612793" blue="0.79215693473815918" alpha="1" colorSpace="deviceRGB"/>
                         <gestureRecognizers/>
@@ -214,9 +224,11 @@
                             <constraint firstItem="DVb-6N-4rV" firstAttribute="centerY" secondItem="Yp4-UT-Sb5" secondAttribute="centerY" id="8AL-Su-fN4"/>
                             <constraint firstItem="DVb-6N-4rV" firstAttribute="top" secondItem="fpN-7I-cjM" secondAttribute="bottom" constant="21" id="A46-bC-Kp3"/>
                             <constraint firstItem="JXW-Wz-lij" firstAttribute="centerX" secondItem="4Od-2c-oS8" secondAttribute="centerX" id="AQX-r9-jVB"/>
+                            <constraint firstAttribute="centerX" secondItem="XPt-0n-V6R" secondAttribute="centerX" constant="-1" id="As3-7h-p4t"/>
                             <constraint firstItem="I3O-Rt-C9u" firstAttribute="centerX" secondItem="aMc-mr-GPA" secondAttribute="centerX" constant="-0.5" id="Eet-eb-hMS"/>
                             <constraint firstAttribute="centerY" secondItem="Yp4-UT-Sb5" secondAttribute="centerY" constant="19" id="Ese-QK-6Za"/>
                             <constraint firstItem="Yp4-UT-Sb5" firstAttribute="leading" secondItem="EjJ-tE-S1B" secondAttribute="trailing" constant="24" id="G2C-LO-tH1"/>
+                            <constraint firstItem="XPt-0n-V6R" firstAttribute="top" secondItem="I3O-Rt-C9u" secondAttribute="bottom" constant="16" id="HkC-ma-B1O"/>
                             <constraint firstItem="x1a-iV-oO6" firstAttribute="centerX" secondItem="DVb-6N-4rV" secondAttribute="centerX" id="M2u-XM-fTZ"/>
                             <constraint firstItem="x1a-iV-oO6" firstAttribute="top" secondItem="DVb-6N-4rV" secondAttribute="bottom" constant="19" id="RRb-bH-JI8"/>
                             <constraint firstItem="Yp4-UT-Sb5" firstAttribute="top" secondItem="JXW-Wz-lij" secondAttribute="bottom" constant="21" id="S8W-yY-2iL"/>
@@ -249,6 +261,7 @@
                         <outlet property="C2" destination="I3O-Rt-C9u" id="ica-Co-T4w"/>
                         <outlet property="C3" destination="x1a-iV-oO6" id="nLt-nN-CpP"/>
                         <outlet property="resetButton" destination="aMc-mr-GPA" id="WxH-tS-QeX"/>
+                        <outlet property="timerLabel" destination="XPt-0n-V6R" id="TwH-Jv-DZi"/>
                         <outlet property="whichPlayerLabel" destination="4Od-2c-oS8" id="bEI-tv-wPG"/>
                     </connections>
                 </viewController>
@@ -387,6 +400,12 @@
                                     <action selector="onResetButtonPressed:" destination="WkE-BW-bhy" eventType="touchUpInside" id="Eb1-SI-BBu"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Timer" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CJB-Cz-6YN">
+                                <rect key="frame" x="139" y="423" width="44" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.68627452850000004" green="0.96470594409999999" blue="0.79215693470000004" alpha="1" colorSpace="deviceRGB"/>
                         <gestureRecognizers/>

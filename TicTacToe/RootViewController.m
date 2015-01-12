@@ -54,6 +54,15 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *resetButton;
 
+@property (weak, nonatomic) IBOutlet UILabel *timerLabel;
+
+@property NSTimer *timer;
+
+@property int timerValue;
+
+@property int timerStartingTime;
+
+
 @end
 
 @implementation RootViewController
@@ -91,6 +100,9 @@
     //Initialize user sets
     self.setWithUserXInputs = [NSMutableSet new];
     self.setWithUserOInputs = [NSMutableSet new];
+
+    //Timer calls
+    [self startDownTimer:5];
 }
 
 //---------------------------------------------Helper Methods-----------------------------
@@ -156,6 +168,28 @@
     return NO;
 }
 
+- (void) startDownTimer:(int) startTime
+{
+    [self.timer invalidate];
+    self.timerValue = startTime;
+    self.timerLabel.text = [NSString stringWithFormat:@"%i",startTime];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(tick) userInfo:nil repeats:YES];
+}
+
+-(void) tick
+{
+    if (self.timerValue <= 0)
+    {
+        self.whichPlayerLabel.text = @"Time's up you lose!";
+        [self.timer invalidate];
+        self.gestureRecognizer.enabled = FALSE;
+    }
+    else
+    {
+        self.timerValue--;
+        self.timerLabel.text = [NSString stringWithFormat:@"%i",self.timerValue];
+    }
+}
 
 //Method to end game and disallow further play
 - (void) restartGame
@@ -171,6 +205,10 @@
 
     //reset new first player
     [self setRandomFirstPLayer];
+
+    //set timer
+    [self startDownTimer:5];
+    [self tick];
 }
 //--------------------------------------The Actions--------------------------------------------
 
