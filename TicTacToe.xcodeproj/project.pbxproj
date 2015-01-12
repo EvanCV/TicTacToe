@@ -16,6 +16,7 @@
 		94E8B80F1A60DBAC00675F96 /* FirstScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94E8B80E1A60DBAC00675F96 /* FirstScreenViewController.m */; };
 		94E8B8151A61F12900675F96 /* AgainstCPUViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94E8B8141A61F12900675F96 /* AgainstCPUViewController.m */; };
 		94E8B8181A61F29300675F96 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94E8B8161A61F29300675F96 /* Main.storyboard */; };
+		94E8B81B1A642EEB00675F96 /* WebViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94E8B81A1A642EEB00675F96 /* WebViewViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,8 @@
 		94E8B8131A61F12900675F96 /* AgainstCPUViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgainstCPUViewController.h; sourceTree = "<group>"; };
 		94E8B8141A61F12900675F96 /* AgainstCPUViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgainstCPUViewController.m; sourceTree = "<group>"; };
 		94E8B8171A61F29300675F96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		94E8B8191A642EEB00675F96 /* WebViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewViewController.h; sourceTree = "<group>"; };
+		94E8B81A1A642EEB00675F96 /* WebViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,12 +92,14 @@
 			children = (
 				9436FC621A5F351700C12D6B /* AppDelegate.h */,
 				9436FC631A5F351700C12D6B /* AppDelegate.m */,
+				94E8B80D1A60DBAC00675F96 /* FirstScreenViewController.h */,
+				94E8B80E1A60DBAC00675F96 /* FirstScreenViewController.m */,
 				9436FC651A5F351700C12D6B /* RootViewController.h */,
 				9436FC661A5F351700C12D6B /* RootViewController.m */,
 				94E8B8131A61F12900675F96 /* AgainstCPUViewController.h */,
 				94E8B8141A61F12900675F96 /* AgainstCPUViewController.m */,
-				94E8B80D1A60DBAC00675F96 /* FirstScreenViewController.h */,
-				94E8B80E1A60DBAC00675F96 /* FirstScreenViewController.m */,
+				94E8B8191A642EEB00675F96 /* WebViewViewController.h */,
+				94E8B81A1A642EEB00675F96 /* WebViewViewController.m */,
 				94E8B8161A61F29300675F96 /* Main.storyboard */,
 				9436FC6B1A5F351700C12D6B /* Images.xcassets */,
 				9436FC6D1A5F351700C12D6B /* LaunchScreen.xib */,
@@ -229,6 +234,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94E8B81B1A642EEB00675F96 /* WebViewViewController.m in Sources */,
 				94E8B8151A61F12900675F96 /* AgainstCPUViewController.m in Sources */,
 				9436FC671A5F351700C12D6B /* RootViewController.m in Sources */,
 				9436FC641A5F351700C12D6B /* AppDelegate.m in Sources */,

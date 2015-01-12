@@ -7,6 +7,7 @@
 //
 
 #import "RootViewController.h"
+#import "WebViewViewController.h"
 
 //------------------------------------- Setting Properties -----------------------------------
 
@@ -260,11 +261,19 @@
                         {
                             self.currentPlayer = YES;
                             self.whichPlayerLabel.text = @"PLayer X you're up!";
+                            //set timer
+                            [self startDownTimer:5];
+                            [self tick];
+
                         }
                         else
                         {
                             self.currentPlayer = NO;
                             self.whichPlayerLabel.text = @"Player O you're up!";
+                            //set timer
+                            [self startDownTimer:5];
+                            [self tick];
+
                         }
                 }
                 

@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Kh2-EM-aec">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--First Screen View Controller-->
@@ -48,8 +49,8 @@
                                 <rect key="frame" x="60" y="165" width="200" height="65"/>
                                 <color key="backgroundColor" red="0.95686280727386475" green="0.51372551918029785" blue="0.41176474094390869" alpha="1" colorSpace="deviceRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="65" id="Hvo-xK-uOR"/>
-                                    <constraint firstAttribute="width" constant="200" id="zB2-7j-ZNY"/>
+                                    <constraint firstAttribute="height" constant="65" id="W9p-39-0rM"/>
+                                    <constraint firstAttribute="width" constant="200" id="nwd-oe-b9g"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
                                 <state key="normal" title="Play Friends">
@@ -64,10 +65,8 @@
                                 <rect key="frame" x="60" y="352" width="200" height="65"/>
                                 <color key="backgroundColor" red="0.95686280729999995" green="0.51372551919999998" blue="0.41176474089999998" alpha="1" colorSpace="deviceRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="MOI-Jk-OA4"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="mSV-6t-eKc"/>
-                                    <constraint firstAttribute="height" constant="65" id="x11-6N-oAV"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="65" id="yfl-V7-Jij"/>
+                                    <constraint firstAttribute="width" constant="200" id="AXc-Zg-5ap"/>
+                                    <constraint firstAttribute="height" constant="65" id="pyM-dy-N5E"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
                                 <state key="normal" title="Play Computer">
@@ -82,14 +81,11 @@
                         <color key="backgroundColor" red="0.68627452850000004" green="0.96470594409999999" blue="0.79215693470000004" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="Osj-kD-ttW" secondAttribute="centerX" id="4G8-m4-sT1"/>
-                            <constraint firstAttribute="centerX" secondItem="EDi-vD-zMi" secondAttribute="centerX" id="8p5-R9-IPv"/>
-                            <constraint firstItem="T8F-31-YZa" firstAttribute="top" secondItem="Osj-kD-ttW" secondAttribute="bottom" constant="36" id="FNf-2F-mNk"/>
-                            <constraint firstItem="T8F-31-YZa" firstAttribute="centerX" secondItem="Osj-kD-ttW" secondAttribute="centerX" id="FSY-fQ-Rkt"/>
-                            <constraint firstItem="EDi-vD-zMi" firstAttribute="top" secondItem="T8F-31-YZa" secondAttribute="bottom" constant="122" id="KiH-nv-NeC"/>
-                            <constraint firstItem="EDi-vD-zMi" firstAttribute="centerX" secondItem="T8F-31-YZa" secondAttribute="centerX" id="YSJ-F0-ouX"/>
-                            <constraint firstItem="EDi-vD-zMi" firstAttribute="centerX" secondItem="Osj-kD-ttW" secondAttribute="centerX" id="ZZE-bY-OTl"/>
-                            <constraint firstItem="T8F-31-YZa" firstAttribute="centerX" secondItem="Osj-kD-ttW" secondAttribute="centerX" id="cZ3-NK-IDl"/>
+                            <constraint firstItem="T8F-31-YZa" firstAttribute="top" secondItem="Osj-kD-ttW" secondAttribute="bottom" constant="36" id="8CV-WG-yvK"/>
+                            <constraint firstItem="EDi-vD-zMi" firstAttribute="top" secondItem="T8F-31-YZa" secondAttribute="bottom" constant="122" id="Hcj-yQ-KoQ"/>
+                            <constraint firstAttribute="centerX" secondItem="EDi-vD-zMi" secondAttribute="centerX" id="Wgq-OY-VDo"/>
                             <constraint firstItem="Osj-kD-ttW" firstAttribute="top" secondItem="QTU-M4-mDd" secondAttribute="bottom" constant="23" id="uYi-LM-2Dk"/>
+                            <constraint firstAttribute="centerX" secondItem="T8F-31-YZa" secondAttribute="centerX" id="vHm-Js-jAI"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="NRh-o7-WLK"/>
@@ -249,7 +245,13 @@
                             <outletCollection property="gestureRecognizers" destination="JjT-wS-037" appends="YES" id="82A-rA-UnJ"/>
                         </connections>
                     </view>
-                    <navigationItem key="navigationItem" title="Tic Tac Toe" id="LNt-iB-Yzo"/>
+                    <navigationItem key="navigationItem" title="Tic Tac Toe" id="LNt-iB-Yzo">
+                        <barButtonItem key="rightBarButtonItem" title="HELP" id="Ox4-h8-lZJ">
+                            <connections>
+                                <segue destination="3el-hl-ZEi" kind="push" id="XAW-SW-0aA"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="A1" destination="vDS-nX-kGs" id="Raj-2X-nFJ"/>
                         <outlet property="A2" destination="JXW-Wz-lij" id="kPX-Jg-doL"/>
@@ -273,6 +275,43 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="797" y="-94"/>
+        </scene>
+        <!--Web View View Controller-->
+        <scene sceneID="u2u-Qi-EJy">
+            <objects>
+                <viewController id="3el-hl-ZEi" customClass="WebViewViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="XfX-eK-rPM"/>
+                        <viewControllerLayoutGuide type="bottom" id="Uoc-SQ-VJM"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="dbc-9b-bRM">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gcI-9S-dL2">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="delegate" destination="3el-hl-ZEi" id="wYM-kJ-EcB"/>
+                                </connections>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Uoc-SQ-VJM" firstAttribute="top" secondItem="gcI-9S-dL2" secondAttribute="bottom" id="3ki-Pl-8gQ"/>
+                            <constraint firstItem="gcI-9S-dL2" firstAttribute="leading" secondItem="dbc-9b-bRM" secondAttribute="leadingMargin" constant="-16" id="RpT-xj-k4z"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="gcI-9S-dL2" secondAttribute="trailing" constant="-16" id="jWM-FL-LqN"/>
+                            <constraint firstItem="gcI-9S-dL2" firstAttribute="top" secondItem="dbc-9b-bRM" secondAttribute="topMargin" id="mLr-5R-mcF"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="z1M-MQ-mcs"/>
+                    <connections>
+                        <outlet property="webView" destination="gcI-9S-dL2" id="xRZ-ZT-LL5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="InT-7q-kQ5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1222" y="343"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="el2-3z-ZG6">
@@ -400,8 +439,12 @@
                                     <action selector="onResetButtonPressed:" destination="WkE-BW-bhy" eventType="touchUpInside" id="Eb1-SI-BBu"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Timer" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CJB-Cz-6YN">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timer" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CJB-Cz-6YN">
                                 <rect key="frame" x="139" y="423" width="44" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="LAw-9v-lEf"/>
+                                    <constraint firstAttribute="height" constant="21" id="TBR-v2-Z6y"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -428,7 +471,9 @@
                             <constraint firstItem="UOP-vT-e8h" firstAttribute="centerY" secondItem="EPl-OL-SNz" secondAttribute="centerY" id="ZfX-wX-qgX"/>
                             <constraint firstItem="ima-ld-VBH" firstAttribute="centerX" secondItem="9ib-Xw-JhH" secondAttribute="centerX" constant="-0.5" id="csB-Gn-XJk"/>
                             <constraint firstItem="Qn5-am-bKt" firstAttribute="centerX" secondItem="EPl-OL-SNz" secondAttribute="centerX" id="dEA-8k-6Z8"/>
+                            <constraint firstItem="CJB-Cz-6YN" firstAttribute="top" secondItem="ima-ld-VBH" secondAttribute="bottom" constant="19" id="dcH-cl-uSI"/>
                             <constraint firstItem="EPl-OL-SNz" firstAttribute="top" secondItem="Qn5-am-bKt" secondAttribute="bottom" constant="21" id="f0e-w3-o3Q"/>
+                            <constraint firstAttribute="centerX" secondItem="CJB-Cz-6YN" secondAttribute="centerX" constant="-1" id="lpp-CW-zws"/>
                             <constraint firstItem="UOP-vT-e8h" firstAttribute="centerX" secondItem="jCI-L9-lEw" secondAttribute="centerX" id="rO7-p7-6ka"/>
                             <constraint firstItem="jCI-L9-lEw" firstAttribute="top" secondItem="UOP-vT-e8h" secondAttribute="bottom" constant="19" id="tDt-Bn-pa6"/>
                             <constraint firstItem="VAZ-PT-mIF" firstAttribute="centerX" secondItem="RZ6-tp-jl0" secondAttribute="centerX" id="uPr-W7-usW"/>
@@ -437,7 +482,13 @@
                             <outletCollection property="gestureRecognizers" destination="1h3-TP-RTk" appends="YES" id="dNC-2g-rWr"/>
                         </connections>
                     </view>
-                    <navigationItem key="navigationItem" title="Tic Tac Toe" id="Fht-3C-TvY"/>
+                    <navigationItem key="navigationItem" title="Tic Tac Toe" id="Fht-3C-TvY">
+                        <barButtonItem key="rightBarButtonItem" title="HELP" id="kv4-hB-ng9">
+                            <connections>
+                                <segue destination="3el-hl-ZEi" kind="push" id="t2r-np-1h9"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="a1" destination="3FZ-1S-4yK" id="aHX-zH-0Fh"/>
                         <outlet property="a2" destination="Qn5-am-bKt" id="SNz-rz-3kd"/>
@@ -466,4 +517,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="t2r-np-1h9"/>
+    </inferredMetricsTieBreakers>
 </document>

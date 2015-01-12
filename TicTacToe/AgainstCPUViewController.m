@@ -7,6 +7,7 @@
 //
 
 #import "AgainstCPUViewController.h"
+#import "WebViewViewController.h"
 
 @interface AgainstCPUViewController ()
 
@@ -111,7 +112,6 @@
     [self performSelector:@selector(computerMoves) withObject: self afterDelay:3.0];
 }
 
-
 //---------------------------------------------Helper Methods-----------------------------
 
 
@@ -131,17 +131,6 @@
 //set first player and icon type based arc4random
 -(void) setRandomFirstPLayer
 {
-    //set random icon type (X or O)
-//    int random1 = (arc4random()%200)+1;
-//    if (random1 < 100)
-//    {
-//        self.userIconType = [UIImage imageNamed:@"Xpicture"];
-//        self.compIconType = [UIImage imageNamed:@"Opicture"];
-//    }
-//    else
-//        self.userIconType = [UIImage imageNamed:@"Opicture"];
-//        self.compIconType = [UIImage imageNamed:@"Xpicture"];
-
     //set random first player
     self.currentPlayer = [self getRandomYesOrNo];
 
@@ -156,6 +145,7 @@
     }
 }
 
+//Checks only for computer win despite the title
 - (BOOL) onlyCheckForComputerWinOrTie
 {
     for (NSSet *set in self.allAnswerPossibilitiesSet)
@@ -168,6 +158,7 @@
     return NO;
 }
 
+//Checks only for human win despite the title
 - (BOOL) onlyCheckForHumanWinOrTie
 {
     for (NSSet *set in self.allAnswerPossibilitiesSet)
@@ -176,41 +167,6 @@
         {
             return YES;
         }
-    }
-    return NO;
-
-}
-
-//comparing two sets to see if players moves = win
-- (BOOL) checkIfPlayerDidWin
-{
-    for (NSSet *set in self.allAnswerPossibilitiesSet)
-    {
-        if ([set isSubsetOfSet:self.humanInputs])
-        {
-            self.whichPlayerLabel.text = @"You have acheived the IMPOSSIBLE!";
-//            [self.humanInputs removeAllObjects];
-//            [self.computerInputs removeAllObjects];
-//            [self.currentStateOfBoard removeAllObjects];
-            return YES;
-        }
-        if ([set isSubsetOfSet:self.computerInputs])
-        {
-            self.whichPlayerLabel.text = @"CPU WINS";
-//            [self.humanInputs removeAllObjects];
-//            [self.computerInputs removeAllObjects];
-//            [self.currentStateOfBoard removeAllObjects];
-            return YES;
-        }
-        if ((self.humanInputs.allObjects.count + self.computerInputs.allObjects.count) >= 9 && (![set isSubsetOfSet:self.humanInputs]) && ![set isSubsetOfSet:self.computerInputs])
-        {
-            self.whichPlayerLabel.text = @"Cats Game...MEOW!";
-//            [self.humanInputs removeAllObjects];
-//            [self.computerInputs removeAllObjects];
-//            [self.currentStateOfBoard removeAllObjects];
-            return YES;
-        }
-        return NO;
     }
     return NO;
 }
@@ -245,12 +201,15 @@
     [self performSelector:@selector(computerMoves) withObject: self afterDelay:2.0];
 }
 
+
+//computer AI
 - (void)computerMoves
 {
     if (self.currentPlayer == YES)
     {
         self.gestureRecognizer.enabled = NO;
 
+        //First move to center if available
         if (![self.currentStateOfBoard containsObject:@"5"] || (self.currentStateOfBoard == nil))
         {
             UIImageView *centerUIView = self.baseImageViewArray[4];
@@ -264,6 +223,8 @@
             NSLog(@"%@", self.computerInputs);
 
         }
+
+        //Move to a random corner if human plays the center first
         else if ((self.currentStateOfBoard.count < 3))
         {
             for (UIImageView *firstNonCenter in self.cornersSet)
@@ -286,6 +247,7 @@
             }
         }
 
+        //Rest of AI
         else if ((self.currentStateOfBoard.count > 2))
         {
             for (UIImageView *cell in self.baseImageViewArray)
@@ -300,7 +262,6 @@
                         cell.image = self.compIconType;
                         [self.currentStateOfBoard addObject:[NSString stringWithFormat:@"%li", (long)cell.tag]];
                         self.currentPlayer = NO;
-                        [self checkIfPlayerDidWin];
                         self.whichPlayerLabel.text = @"The CPU Won Again!";
                         self.gestureRecognizer.enabled = NO;
                         return;
@@ -322,17 +283,28 @@
                         self.gestureRecognizer.enabled = YES;
                         return;
                     }
+
+                    else if (![self onlyCheckForComputerWinOrTie] && ![self onlyCheckForHumanWinOrTie])
+                    {
+                        cell.image = self.compIconType;
+                        [self.currentStateOfBoard addObject:[NSString stringWithFormat:@"%li", (long)cell.tag]];
+                        [self.humanInputs removeObject:[NSString stringWithFormat:@"%li", (long)cell.tag]];
+                        self.currentPlayer = NO;
+                        self.whichPlayerLabel.text = @"You're Up!";
+                        self.gestureRecognizer.enabled = YES;
+                        return;
+                    }
+
                     [self.computerInputs removeObject:[NSString stringWithFormat:@"%li", (long)cell.tag]];
                     [self.humanInputs removeObject:[NSString stringWithFormat:@"%li", (long)cell.tag]];
                 }
             }
-            [self checkIfPlayerDidWin];
         }
     }
 }
 
 
-
+//Handles all human interaction
 - (IBAction)onScreenTapped:(UIGestureRecognizer *)gesture
 {
     self.gestureRecognizer = gesture;
@@ -340,7 +312,7 @@
     //CGPoint coordinates when screen is touched
     CGPoint touchPoint  = [gesture locationInView:self.view];
 
-    if (![self checkIfPlayerDidWin] && (self.currentPlayer == NO))
+    if (![self onlyCheckForComputerWinOrTie] && (self.currentPlayer == NO) && ![self onlyCheckForHumanWinOrTie])
     {
         //For loop gets the frame property from all ImageViews then determines whether the CGPoint iis in any UIView frames. If the the CGPoint is in a frame it will place either an X or O image in the UIView depending on which user's turn it is.
         for (UIImageView *myImageView in self.baseImageViewArray)
@@ -358,17 +330,18 @@
                 {
                     NSLog(@"%@", self.currentStateOfBoard);
 
-                    if ([self checkIfPlayerDidWin])
+                    if ([self onlyCheckForHumanWinOrTie])
                     {
-                        [self checkIfPlayerDidWin];
-                        gesture.enabled = NO;
+                        self.currentPlayer = NO;
+                        self.whichPlayerLabel.text = @"You Beat CPU!";
+                        self.gestureRecognizer.enabled = NO;
+                        return;
                     }
                     else
                     {
                         self.whichPlayerLabel.text = @"CPU is thinking...";
                         self.currentPlayer = YES;
                         [self computerMoves];
-//                        [self performSelector:@selector(computerMoves) withObject: self afterDelay:2.0];
                     }
                 }
             }
